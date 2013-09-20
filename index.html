@@ -8,12 +8,10 @@
 </head>
 <body>
 	<h1>Blink detect using getUserMedia and Canvas</h1>
-	<ul>
-		<li><a href="/blink-detect/initial-demo/">Initial demo</a> (Firefox only)</li>
-		<li><a href="/blink-detect/movement/">Movement</a></li>
-		<li><a href="/blink-detect/area/">Area</a></li>
-		<li><a href="/blink-detect/headtracker/">Headtracker</a></li>
-	</ul>
+	<p>The <a href="/blink-detect/initial-demo/">initial demo</a> (Firefox only) works but also makes a lot of false positives and negatives if there's too much background movement.</p>
+	<p><a href="/blink-detect/movement/">Movement</a> is a refinement of the initial demo to work in other browsers that support getUserMedia.</p>
+	<p>To limit the background interference we tried using a small fixed <a href="/blink-detect/area/">area</a>, asking the user to keep their head still.</p>
+	<p>We then tried using a <a href="/blink-detect/headtracker/">headtracker</a> script to ignore the area outside of the user's face.</p>
 	<!-- Scripts -->
 </body>
 </html>
