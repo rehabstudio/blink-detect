@@ -1,0 +1,216 @@
+<!DOCTYPE HTML>
+<html>
+	<head lang="en">
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width">
+		<title>Head Tracking</title>
+    <link rel="stylesheet" href="../css/instructions.css" type="text/css" />
+		<style>
+      html, body { margin:0; padding:0;}
+
+			video, canvas { display: inline-block; border: 1px solid #000; }
+			#diff { border: 1px solid #000; }
+
+      .dg.main.a { margin-right: 200px; !important}
+
+      #outline { position:absolute; border: 1px solid #ff0000; width:100px; height:100px; top:70px; left: 110px;}
+
+      video, #outline { display:none; }
+		</style>
+		<!-- Styles -->
+	</head>
+	<body>
+		<video id="video" width="320"  height="240"></video>
+    <canvas id="head" width="320" height="240"></canvas>
+		<canvas id="out" width="100" height="100"></canvas>
+  <!-- Monitoring canvas and audio -->  
+    <canvas id="diff" width="100" height="100"></canvas>
+
+
+    
+
+    <div id="outline"></div>
+  	<audio id="audio" src="Metal_Hit.ogg"></audio>
+  	
+  <script src="blinktracker.js"></script>
+  <script src="headtrackr.js"></script>
+
+  <script type="text/javascript" src="dat.gui.min.js"></script>
+ 
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+
+  console.log("DOMContentLoaded");
+
+  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+  window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
+
+  var video = document.getElementById('video'),
+  options = {audio: false, video:true};
+
+  if (navigator.getUserMedia){
+    navigator.getUserMedia(options, v_success, v_error);
+  } else {
+    not_supported();
+  }
+
+  function not_supported() {
+    video.innerHTML = "<source src=\""+webmvideo+"\" type=\"video\/webm\" ><\/source> <source src=\""+mp4video+"\" type=\"video\/mp4\" ><\/source>";
+    video.muted= true;        
+    // setInterval(copyVideoToCanvas, 100);
+  }
+
+  function v_success(stream) {
+    if (video.mozCaptureStream) { // Needed to check for Firefox
+      video.mozSrcObject = stream;
+    } else {
+      video.src = (window.URL && window.URL.createObjectURL(stream)) || stream;
+    }
+    // video.play();
+
+    console.log("video meta data?: " + video.onloadedmetadata, video.loadedmetadata);
+
+    video.onloadedmetadata = function(e) {
+      console.log("video.onloadedmetadata");
+      video.play();
+      processor.onLoad();
+    };
+
+    video.addEventListener('loadedmetadata', function(e){
+      console.log("video loadedmetadata");
+      video.play();
+      processor.onLoad();
+
+    });
+
+    
+  }
+
+  function v_error(error) {
+    console.log("Error! Error code is:"+error.code);
+    video.innerHTML = "<source src=\""+webmvideo+"\" type=\"video\/webm\" ><\/source> <source src=\""+mp4video+"\" type=\"video\/mp4\" ><\/source>";
+    video.muted= true;
+
+    
+  }
+
+
+
+});
+
+</script>
+
+
+<script type="text/javascript">
+var FizzyText = function() {
+  this.eyeDiffTolerance = 25;
+  this.tolerance = 15;
+  this.recalibrationTolerance = 10;
+  this.playSound = false;
+};
+
+window.onload = function() {
+  var text = new FizzyText();
+  var gui = new dat.GUI();
+  
+  var eController = gui.add(text, 'eyeDiffTolerance', 1, 100);
+  var tController = gui.add(text, 'tolerance', 10, 30);
+
+  var rController = gui.add(text, 'recalibrationTolerance', 1, 40);
+  var aController = gui.add(text, 'playSound');
+
+  var self = this;
+
+  eController.onFinishChange( function(value)  {
+    console.log("eyeDiff controller: " + value);
+     processor.setEyeDiffTolerance ( Math.round(value) );
+  });
+
+  tController.onFinishChange( function(value)  {
+    console.log("tolerance controller: " + value);
+    processor.setTolerance( Math.round(value) );
+  });
+
+  rController.onFinishChange( function(value)  {
+    console.log("head move tolerance controller: " + value);
+    processor.setRecalibrationTolerance( Math.round(value) );
+  });
+
+  aController.onFinishChange( function(value)  {
+    console.log("audio controller: " + value);
+    // processor.setTolerance( Math.round(value) );
+    processor.setHasAudio( value );
+  });
+
+};
+    
+</script>
+
+
+<script type="text/javascript">
+  var videoInput = document.getElementById('video');
+  var canvasInput = document.getElementById('head');
+
+  var isMovable = true;
+
+  var htracker = new headtrackr.Tracker( { debug: canvasInput, calcAngles: false } );
+  htracker.init(videoInput, canvasInput);
+  htracker.start();
+
+
+
+  document.addEventListener('facetrackingEvent', 
+  function (event) {
+    //if(isMovable == false) return;
+    // console.log( event.x, event.y, event.width, event.height );
+    // processor.videoX = 100;//event.x;
+    // processor.videoY = 50;//event.y;
+    // processor.videoWidth = 100;//event.width;
+    // processor.videoHeight = 100;//event.height;
+
+    processor.setSizeAndLocation( event );
+    // isMovable = false;
+    // setTimeout(function(){
+    //   console.log("setTimeout: " + this, self);
+    //   self.isMovable = true;
+    //   console.log("isMovable: " + self.isMovable, processor.getCalibrationTime());
+    // },processor.getCalibrationTime());
+
+  }
+);
+
+
+</script>
+
+
+
+<div class = "notes">
+  <h2>Headtracker Demo</h2>
+
+  <h2>Instructions</h2>
+  <ul>
+    <li>Accept camera access request (Twice)</li>
+    <li>Ideal distance from camera is approx 1.5 to 2 feet</li>
+    <li>First frame shows the head tracking results. If the area detected is much larger than actual head, may need to refresh page.</li>
+    <li>Second frame shows the area we are detecting. This adjusts when the head has moved a certain amount</li>
+    <li>Third frame shows the motion being picked up for detection</li>
+    <li>When a blink is detected, boxes are overlayed over the 2nd and 3rd frames. A green box is considered valid and a red box is determined to be a false positive.</li>
+    <li>If blinks are not being detected, try moving head slowly side to side or forward backward and retrying</li>
+  </ul>
+
+  <h2>Development Controls</h2>
+  <ul>
+    <li>eyeDiffTolerance: Adjust the allowed difference for the 2 eye detection boxes. Lower number shows more false positives.</li>
+    <li>tolerance: Adjust the motion tolerance. The lower the number, the more sensitive to movement.</li>
+    <li>recalibrationTolerance: Adjust the amount of head movement needed to trigger a refresh of the area we are checking against.</li>
+    <li>playSound: audio feedback for when blinks are detected</li>
+  </ul>
+
+</div>
+
+
+	</body>
+</html>
