@@ -1,0 +1,171 @@
+<!DOCTYPE HTML>
+<html>
+	<head lang="en">
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width">
+		<title>Fixed</title>
+    <link rel="stylesheet" href="../css/instructions.css" type="text/css" />
+		<style>
+      html, body { margin:0; padding:0;}
+
+			video, canvas { display: inline-block; border: 1px solid #000; }
+			#diff { border: 1px solid #000; }
+
+      .dg.main.a { margin-right: 200px; !important}
+
+      #outline { position:absolute; border: 1px solid #ff0000; width:100px; height:100px; top:70px; left: 110px;}
+		</style>
+		<!-- Styles -->
+	</head>
+	<body>
+		<video id="video" width="320"  height="240"></video>
+		<canvas id="out" width="100" height="100"></canvas>
+  <!-- Monitoring canvas and audio -->  
+  	<canvas id="diff" width="100" height="100"></canvas>
+
+    <div id="outline"></div>
+  	<audio id="audio" src="Metal_Hit.ogg"></audio>
+
+  	
+  <script src="blinktracker.js"></script>
+
+  <script type="text/javascript" src="dat.gui.min.js"></script>
+ 
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+
+  console.log("DOMContentLoaded");
+
+  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+  window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
+
+  var video = document.getElementById('video'),
+  options = {audio: false, video:true};
+
+  if (navigator.getUserMedia){
+    navigator.getUserMedia(options, v_success, v_error);
+  } else {
+    not_supported();
+  }
+
+  function not_supported() {
+    video.innerHTML = "<source src=\""+webmvideo+"\" type=\"video\/webm\" ><\/source> <source src=\""+mp4video+"\" type=\"video\/mp4\" ><\/source>";
+    video.muted= true;        
+    // setInterval(copyVideoToCanvas, 100);
+  }
+
+  function v_success(stream) {
+    if (video.mozCaptureStream) { // Needed to check for Firefox
+      video.mozSrcObject = stream;
+    } else {
+      video.src = (window.URL && window.URL.createObjectURL(stream)) || stream;
+    }
+    // video.play();
+
+    console.log("video meta data?: " + video.onloadedmetadata, video.loadedmetadata);
+
+    video.onloadedmetadata = function(e) {
+      console.log("video.onloadedmetadata");
+      video.play();
+      processor.onLoad();
+    };
+
+    video.addEventListener('loadedmetadata', function(e){
+      console.log("video loadedmetadata");
+      video.play();
+      processor.onLoad();
+
+    });
+
+    
+  }
+
+  function v_error(error) {
+    console.log("Error! Error code is:"+error.code);
+    video.innerHTML = "<source src=\""+webmvideo+"\" type=\"video\/webm\" ><\/source> <source src=\""+mp4video+"\" type=\"video\/mp4\" ><\/source>";
+    video.muted= true;
+
+    
+  }
+
+
+
+});
+
+</script>
+
+
+<script type="text/javascript">
+var FizzyText = function() {
+  this.width = 120;
+  this.height = 120;
+  this.tolerance = 15;
+  this.playSound = false;
+};
+
+window.onload = function() {
+  var text = new FizzyText();
+  var gui = new dat.GUI();
+  
+  var wController = gui.add(text, 'width', 10, 200);
+  var hController = gui.add(text, 'height', 10, 200);
+  var tController = gui.add(text, 'tolerance', 10, 30);
+  var aController = gui.add(text, 'playSound');
+
+  wController.onFinishChange( function(value)  {
+    console.log("width controller: " + value);
+     processor.setWidth( Math.round(value) );
+  });
+
+  hController.onFinishChange( function(value)  {
+    console.log("height controller: " + value);
+    processor.setHeight( Math.round(value) );
+  });
+
+  tController.onFinishChange( function(value)  {
+    console.log("tolerance controller: " + value);
+    processor.setTolerance( Math.round(value) );
+  });
+
+  aController.onFinishChange( function(value)  {
+    console.log("audio controller: " + value);
+    // processor.setTolerance( Math.round(value) );
+    processor.setHasAudio( value );
+  });
+
+};
+    
+</script>
+
+
+<div class = "notes">
+  <h2>Fixed Area Demo</h2>
+
+  <h2>Instructions</h2>
+  <ul>
+    <li>Accept camera access request</li>
+    <li>Position head within the red square</li>
+    <li>Ideal distance from camera is approx 1.5 to 2 feet</li>
+    <li>First frame shows the raw webcam feed</li>
+    <li>Second frame shows the area we are detecting</li>
+    <li>Third frame shows the motion being picked up for detection</li>
+    <li>When a blink is detected, boxes are overlayed over the 2nd and 3rd frames. A green box is considered valid and a red box is determined to be a false positive.</li>
+  </ul>
+
+  <h2>Development Controls</h2>
+  <ul>
+    <li>Use width/height sliders to change the size of the area to check for blinks</li>
+    <li>tolerance: Adjust the motion tolerance. The lower the number, the more sensitive to movement.</li>
+    <li>playSound: audio feedback for when blinks are detected</li>
+  </ul>
+
+</div>
+
+
+
+
+	</body>
+</html>
