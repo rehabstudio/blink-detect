@@ -5,13 +5,11 @@ Using getUserMedia for camera input, detects eyes and then compares frames to se
 
 ##Version order##
 
-/initial-demo
-/movement
-/area
-/headtracker
+* /initial-demo
+* /movement
+* /area
+* /headtracker
 
 ##Credits##
 
-The code is based on Dave Burke's blink detection demo (http://gddbeijing.appspot.com/blink.html), which used pre-recorded video input; we added getUserMedia.
-
-This currently only works in Firefox because of the requirement to use let (JS 1.7), and is very far from optimised.
+The code is based on Dave Burke's blink detection demo (http://gddbeijing.appspot.com/blink.html), which used pre-recorded video input; Peter Gasston added getUserMedia, and Byron Manley developed all subsequent options.
