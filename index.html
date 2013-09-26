@@ -4,14 +4,84 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width">
-	<title>Rehab Github Blink Detect</title>
+	<title>Blinkwashing Prototypes - Rehabstudio</title>
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Abel">
+	<style>
+	body {
+		font-family: "Abel", sans-serif;
+		margin: 0;
+	}
+	section {
+		padding: 1rem;
+	}
+	.inner {
+		margin: 0 auto;
+		max-width: 800px;
+	}
+	h1 {
+		font-size: 2rem;
+		font-weight: 900;
+		line-height: 1.25;
+		margin: 0.625rem 0;
+	}
+	h2 {
+		font-size: 1.625rem;
+		font-weight: 700;
+		line-height: 1.5385;
+		margin: 0.625rem 0 0.125rem;
+	}
+	p {
+		line-height: 1.25;
+		margin: 0 0 0.625rem;
+	}
+	a { color: #16a085; }
+	a:hover, a:focus { text-decoration: none; }
+	ol {
+		list-style: none;
+		padding-left: 0;
+	}
+	@media (min-width: 600px) {
+
+	ol {
+		display: -ms-flexbox;
+		display: -webkit-flex;
+		display: flex;
+	}
+	li {
+		-ms-flex: 1 1 25%;
+		-webkit-flex: 1 1 25%;
+		flex: 1 1 25%;
+		margin-left: 0.625rem;
+	}
+	ol li:first-child { margin: 0; }
+
+	}
+	</style>
 </head>
 <body>
-	<h1>Blink detect using getUserMedia and Canvas</h1>
-	<p>The <a href="/blink-detect/initial-demo/">initial demo</a> (Firefox only) works but also makes a lot of false positives and negatives if there's too much background movement.</p>
-	<p><a href="/blink-detect/movement/">Movement</a> is a refinement of the initial demo to work in other browsers that support getUserMedia.</p>
-	<p>To limit the background interference we tried using a small fixed <a href="/blink-detect/area/">area</a>, asking the user to keep their head still.</p>
-	<p>We then tried using a <a href="/blink-detect/headtracker/">headtracker</a> script to ignore the area outside of the user's face.</p>
+	<section>
+		<div class="inner">
+			<h1>Blink detection using getUserMedia and Canvas</h1>
+			<p><a href="http://rehabstudio.com">We</a> recently launched the <a href="http://www.youtube.com/user/virginmobileusa/blinkwashing">Blinkwashing</a> project for Virgin Media USA, which uses camera input to detect when a user blinks, and using that as a trigger to switches between a range of videos. We ended up building this in Flash, but much of the preparatory work was done with <code>getUserMedia</code> and <code>canvas</code>.</p>
+			<p>The decision to use Flash wasn’t made lightly; we really wanted this to work on mobile/tablet, but in the end the support for <code>getUserMedia</code> simply wasn’t broad enough, and Flash had the wider reach. But we’re making the source code of our early prototypes available just in case anyone has more time in the future to be able to try to make this work again.</p>
+			<p>We can’t claim to have made this all ourself; it’s based on code by <a href="http://gddbeijing.appspot.com/blink.html">Dave Burke</a> (<a href="http://ajaxian.com/archives/finally-a-useful-blink-tag-detecting-your-user-blinking">here’s how it works</a>), we just added to it.</p>  
+			<h2>The prototypes</h2>
+			<ol>
+				<li>
+					<p>The <a href="/blink-detect/initial-demo/">initial demo</a> (Firefox only) gives a lot of false positives and negatives if there's too much background movement.</p>
+				</li>
+				<li>
+					<p><a href="/blink-detect/movement/">Movement</a> is a refinement of the initial demo to work in other browsers that support <code>getUserMedia</code>.</p>
+				</li>
+				<li>
+					<p>To limit the background interference we tried using a small fixed <a href="/blink-detect/area/">area</a>, requiring the user to keep their head still.</p>
+				</li>
+				<li>
+					<p>We then tried using a <a href="/blink-detect/headtracker/">headtracker</a> script to ignore the area outside of the user's face.</p>
+				</li>
+			</ol>
+		</div>
+	</section>
 	<!-- Scripts -->
 </body>
 </html>
