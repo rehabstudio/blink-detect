@@ -50,8 +50,7 @@
 		<div class="inner">
 			<h1>Blink detection using getUserMedia and Canvas</h1>
 			<p><a href="http://rehabstudio.com">We</a> recently launched the <a href="http://www.youtube.com/user/virginmobileusa/blinkwashing">Blinkwashing</a> project for Virgin Media USA, which uses camera input to detect when a user blinks, and using that as a trigger to switches between a range of videos. We ended up building this in Flash, but much of the preparatory work was done with <code>getUserMedia</code> and <code>canvas</code>.</p>
-			<p>The decision to use Flash wasn’t made lightly; we really wanted this to work on mobile/tablet, but in the end the support for <code>getUserMedia</code> simply wasn’t broad enough, and Flash had the wider reach. But we’re making the source code of our early prototypes available just in case anyone has more time in the future to be able to try to make this work again.</p>
-			<p>We can’t claim to have made this all ourself; it’s based on code by <a href="http://gddbeijing.appspot.com/blink.html">Dave Burke</a> (<a href="http://ajaxian.com/archives/finally-a-useful-blink-tag-detecting-your-user-blinking">here’s how it works</a>), we just added to it.</p>  
+			<p>The decision to use Flash wasn’t made lightly; we really wanted this to work on mobile/tablet, but in the end the support for <code>getUserMedia</code> simply wasn’t broad enough, and Flash had the wider reach. But we’re making the source code of our early prototypes available just in case anyone has more time in the future to be able to try to make this work again.</p>  
 			<h2>The prototypes</h2>
 			<div class="prototypes">
 				<p>The <a href="/blink-detect/initial-demo/">initial demo</a> gives a lot of false positives and negatives if there's too much background movement. It’s heavily based on Dave Burke’s work, and functions in Firefox&nbsp;only.</p>
@@ -59,6 +58,7 @@
 				<p>To limit the background interference we tried a couple of different approaches; first of these was a small <a href="/blink-detect/area/">fixed area</a> which requires the user to keep their head&nbsp;still.</p>
 				<p>We then tried using a <a href="/blink-detect/headtracker/">headtracker</a> script to ignore the area outside of the user’s&nbsp;face.</p>
 			</div>
+			<p>While building these prototypes we built on code by <a href="http://gddbeijing.appspot.com/blink.html">Dave Burke</a> (<a href="http://ajaxian.com/archives/finally-a-useful-blink-tag-detecting-your-user-blinking">here’s how it works</a>) and Tomek Augustyn’s <a href="https://github.com/og2t/HiSlope">HiSlope</a>.</p>
 		</div>
 	</section>
 	<!-- Scripts -->
